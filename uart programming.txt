@@ -1,0 +1,105 @@
+//打开串口并且初始化
+int init_serial(void)
+{
+	1.打开串口
+		fd = open("/dev/xxxx" O_RDWR | O_NOCTTY | O_NDELAY);
+			O_NOCTTY 如果pathname指的是终端设备，则不将此设备分配作为此进程的控制终端
+			
+			O_NDELAY 和 O_NONBLOCK 产生结构都是使得I/O变成非搁置模式（non-blocking），在读取不到数据或是
+			写入缓存已满会马上return， 而不是搁置程序动作，直到有数据或写入完成
+			它们的差别在于设立O_NDELAY会使I/O函式马上回传0，但是又衍生出一个问题，因为读取到档案结尾时所回传的也是0，
+			这样无法得知是哪中情况；因此，O_NONBLOCK就产生出来，它在读取不到数据时会回传-1，并且设置errno为EAGAIN
+	
+	
+	2. 设置串口结构体termios <termios.h>
+		1).定义结构体
+			struct termios options;
+		2).由tcgetattr函数获得参数存放在options中
+			tcgetattr(fd, &options);
+			
+	<重点>	修改参数
+			
+			options.c_cflag /*control mode flags*/ |= (CLOCAL | CREAD); 设置控制模式状态，本地连接，接收使能
+			options.c_cflag &= ~CSIZE; //字符长度。设置数据位前一定先屏蔽这个位
+			options.c_cflag &= ~CRTSCTS; //无硬件流控
+			options.c_cflag |= CS8;//8位数据长度
+			options.c_cflag &= ~CSTOPB;//1位停滞位
+			options.c_iflag /*input mode flags*/ |= 	IGNPAR;//1位奇偶校验位
+			options.c_oflag /*output mdoe flags*/= 0; //输出模式
+			options.c_lflag /*local mode flags*/ = 0; //不激活模式
+			
+			cfsetospeed(&options, B115200); //设置波特率
+			
+		3）. 设置新属性，TCSANOW: 所有改变立即生效
+			tcflush(fd, TCIFLUSH);//溢出数据可以生效，但不读
+			tcsetattr(fd, TCSANOW, &options);
+			
+			return 0;
+}
+
+
+/**
+*发送数据
+*@fd；串口描述符
+*/
+
+int uart_send(int fd, char *data, int datalen)
+{
+	int len = 0;
+	len = write(fd, data, datalen);
+	if(len == datalen){
+		return len;
+	}
+	else{
+		tcflush(fd, TCOFLUSH);//TCOFLUSH刷新写入数据但不发送
+		return -1；
+	}
+}
+
+/**
+*接收数据
+*@fd；串口描述符
+*/
+
+int uart_recv(int fd, char *data, int datalen)
+{
+	int len = 0, ret = 0;
+	fd_set fs_read;
+	struct timeval timeout;
+	
+	FD_ZER0(&fs_read);
+	FD_SET(fd, &fs_read);
+	timeout.tv_sec 	= (10*20/115200+2);
+	timeout.tv_usec	= 0;
+	
+	ret = select(fd+1, &fs_read, NULL, NULL, &timeout);
+	
+	if(FD_ISSET(fd, &fd_read)){
+		len = read(fd, data, datalen);
+		return ken;
+	}
+	else{
+		perror("select");
+		return -1;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
