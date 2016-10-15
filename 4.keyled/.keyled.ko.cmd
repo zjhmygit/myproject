@@ -1,0 +1,1 @@
+cmd_/home/gec/linuxdrv/src/mkdrv/4.keyled/keyled.ko := /usr/local/arm/arm-2009q3/bin/arm-none-linux-gnueabi-ld -EL -r  -T /home/gec/linuxdrv/src/android-kernel-samsung-dev/scripts/module-common.lds --build-id -o /home/gec/linuxdrv/src/mkdrv/4.keyled/keyled.ko /home/gec/linuxdrv/src/mkdrv/4.keyled/keyled.o /home/gec/linuxdrv/src/mkdrv/4.keyled/keyled.mod.o
