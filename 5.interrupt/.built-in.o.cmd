@@ -1,0 +1,1 @@
+cmd_/home/115/mk_kernel/src/mkdrv/5.interrupt/built-in.o :=  rm -f /home/115/mk_kernel/src/mkdrv/5.interrupt/built-in.o; /usr/local/arm/arm-2009q3/bin/arm-none-linux-gnueabi-ar rcs /home/115/mk_kernel/src/mkdrv/5.interrupt/built-in.o

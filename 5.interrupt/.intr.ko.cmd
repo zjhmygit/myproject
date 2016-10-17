@@ -1,0 +1,1 @@
+cmd_/home/115/mk_kernel/src/mkdrv/5.interrupt/intr.ko := /usr/local/arm/arm-2009q3/bin/arm-none-linux-gnueabi-ld -EL -r  -T /home/115/mk_kernel/src/android-kernel-samsung-dev/scripts/module-common.lds --build-id -o /home/115/mk_kernel/src/mkdrv/5.interrupt/intr.ko /home/115/mk_kernel/src/mkdrv/5.interrupt/intr.o /home/115/mk_kernel/src/mkdrv/5.interrupt/intr.mod.o
